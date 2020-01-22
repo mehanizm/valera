@@ -10,13 +10,13 @@ import (
 
 // config is struct to parse yaml configuration
 type config struct {
-	PROXY_URL          string `yaml:"PROXY_URL"`
-	PROXY_USER         string `yaml:"PROXY_USER"`
-	PROXY_PASS         string `yaml:"PROXY_PASS"`
-	TELEGRAM_BOT_TOKEN string `yaml:"TELEGRAM_BOT_TOKEN"`
-	JIRA_USER          string `yaml:"JIRA_USER"`
-	JIRA_PASS          string `yaml:"JIRA_PASS"`
-	JIRA_URL           string `yaml:"JIRA_URL"`
+	proxyURL   string `yaml:"PROXY_URL"`
+	proxyUser  string `yaml:"PROXY_USER"`
+	proxyPass  string `yaml:"PROXY_PASS"`
+	tgBotToken string `yaml:"TELEGRAM_BOT_TOKEN"`
+	jiraURL    string `yaml:"JIRA_URL"`
+	jiraUser   string `yaml:"JIRA_USER"`
+	jiraPass   string `yaml:"JIRA_PASS"`
 }
 
 // ParseFromFile parse YAML congig from file
