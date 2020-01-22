@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	configFilePath       = flag.String("config", "configs/config_test.yaml", "Путь до конфигурационного файла")
-	allowedChatsFilePath = flag.String("allowed", "configs/whitelist.txt", "Путь до разрешенных чатов")
+	configFilePath       = flag.String("config", "configs/config.yaml", "Configuration file path")
+	allowedChatsFilePath = flag.String("allowed", "configs/whitelist.txt", "White list of the chats")
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 	if err != nil {
 		log.Println("ERROR:", err)
 	}
-	log.Println("To add chat to white list, please, send the string to Bot", auth.secret)
+	log.Println("To add chat to the white list, please, send the string to the Bot:", auth.secret)
 
 	b := initializeBot(config)
 	b.Raw("deleteWebhook", map[string]string{})
