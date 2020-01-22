@@ -1,23 +1,30 @@
 package main
 
 import (
+	"flag"
+	"log"
+
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-const (
-	PROXY_URL          = "grsst.s5.opennetwork.cc:999"
-	PROXY_USER         = "41591017"
-	PROXY_PASS         = "5NEISabl"
-	TELEGRAM_BOT_TOKEN = "781350316:AAGX5fxcytfyRNlof5SzbJrl42jtHbxFBqI"
+var (
+	configFilePath = flag.String("config", "config.yaml", "Путь до конфигурационного файла")
 )
 
 func main() {
 
-	b := initializeBot()
+	flag.Parse()
+	config, err := parseConfigFromFile(*configFilePath)
+	if err != nil {
+		return
+	}
+
+	b := initializeBot(config)
 	b.Raw("deleteWebhook", map[string]string{})
 
 	b.Handle(tb.OnText, b.textMessageHandler)
 
+	log.Println("Start telegram bot")
 	b.Start()
 
 }

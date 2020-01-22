@@ -1,0 +1,7 @@
+PROXY_URL: url:port
+PROXY_USER: test_user
+PROXY_PASS: test_pass
+TELEGRAM_BOT_TOKEN: test_token
+JIRA_USER: test_user
+JIRA_PASS: test_pass
+JIRA_URL: https://jira.example-company.ru
