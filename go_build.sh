@@ -13,3 +13,7 @@ echo ""
 echo "build linux version"
 GOOS=linux GOARCH=amd64 go build -o builds/valera_lunux -v *.go
 echo "build success"
+
+echo ""
+echo "generate test coverage"
+gopherbadger -md="README.md"
