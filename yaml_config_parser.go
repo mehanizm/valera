@@ -10,13 +10,13 @@ import (
 
 // config is struct to parse yaml configuration
 type config struct {
-	proxyURL   string `yaml:"PROXY_URL"`
-	proxyUser  string `yaml:"PROXY_USER"`
-	proxyPass  string `yaml:"PROXY_PASS"`
-	tgBotToken string `yaml:"TELEGRAM_BOT_TOKEN"`
-	jiraURL    string `yaml:"JIRA_URL"`
-	jiraUser   string `yaml:"JIRA_USER"`
-	jiraPass   string `yaml:"JIRA_PASS"`
+	ProxyURL   string `yaml:"PROXY_URL"`
+	ProxyUser  string `yaml:"PROXY_USER"`
+	ProxyPass  string `yaml:"PROXY_PASS"`
+	TgBotToken string `yaml:"TELEGRAM_BOT_TOKEN"`
+	JiraURL    string `yaml:"JIRA_URL"`
+	JiraUser   string `yaml:"JIRA_USER"`
+	JiraPass   string `yaml:"JIRA_PASS"`
 }
 
 // ParseFromFile parse YAML congig from file
@@ -24,7 +24,11 @@ type config struct {
 // structure of the file should corresponds to YamlConfig struct
 func parseConfigFromFile(filePath string) (*config, error) {
 
-	filename, _ := filepath.Abs(filePath)
+	filename, err := filepath.Abs(filePath)
+	if err != nil {
+		log.Println("Cannot find configuration file", err)
+		return nil, err
+	}
 
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {

@@ -3,14 +3,6 @@
 # Created by https://www.gitignore.io/api/visualstudiocode,macos,go
 # Edit at https://www.gitignore.io/?templates=visualstudiocode,macos,go
 
-### Go ###
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
 # Test binary, built with `go test -c`
 *.test
 
@@ -69,3 +61,4 @@ Temporary Items
 
 configs/config_test.yaml
 .vscode/settings.json
+configs/whitelist.txt

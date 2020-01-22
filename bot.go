@@ -23,11 +23,11 @@ func initializeBot(config *config) *bot {
 
 	client := http.DefaultClient
 
-	if config.proxyURL != "" {
+	if config.ProxyURL != "" {
 		dialer, err := proxy.SOCKS5(
 			"tcp",
-			config.proxyURL,
-			&proxy.Auth{User: config.proxyUser, Password: config.proxyPass},
+			config.ProxyURL,
+			&proxy.Auth{User: config.ProxyUser, Password: config.ProxyPass},
 			proxy.Direct,
 		)
 
@@ -46,7 +46,7 @@ func initializeBot(config *config) *bot {
 	}
 
 	embeddedBot, err := tb.NewBot(tb.Settings{
-		Token:  config.tgBotToken,
+		Token:  config.TgBotToken,
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 		Client: client,
 	})
@@ -59,10 +59,10 @@ func initializeBot(config *config) *bot {
 	// jira initialization
 
 	tp := jira.BasicAuthTransport{
-		Username: config.jiraUser,
-		Password: config.jiraPass,
+		Username: config.JiraUser,
+		Password: config.JiraPass,
 	}
-	embeddedJira, err := jira.NewClient(tp.Client(), config.jiraURL)
+	embeddedJira, err := jira.NewClient(tp.Client(), config.JiraURL)
 	if err != nil {
 		log.Println("Can't initialize bot", err)
 		return nil

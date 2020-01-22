@@ -1,6 +1,11 @@
 package main
 
-import "strings"
+import (
+	"math/rand"
+	"strings"
+)
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func getUniqueSlice(sl []string) []string {
 	tempMap := make(map[string]struct{}, len(sl))
@@ -13,4 +18,12 @@ func getUniqueSlice(sl []string) []string {
 		}
 	}
 	return res
+}
+
+func randSeq(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
 }
