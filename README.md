@@ -46,7 +46,7 @@ JIRA_PASS: test_pass
 JIRA_URL: https://jira.example-company.ru
 ```
 
-Proxy information is needed only if you have blocking problems in you country.
+Proxy information is needed only if you have blocking problems in you country. You can find free SOCKS5 proxy in @socks5_bot telegram bot.
 
 For now only basic auth in jira is supported so you have to provide login and password.
 
