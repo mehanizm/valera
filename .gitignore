@@ -64,3 +64,4 @@ configs/config_test.yaml
 configs/whitelist.txt
 
 *.png
+.vscode/launch.json

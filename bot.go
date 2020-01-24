@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
-	"log"
+	"errors"
 	"net"
 	"net/http"
 	"time"
+	"unicode/utf8"
 
 	jira "github.com/andygrunwald/go-jira"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/proxy"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
@@ -17,11 +19,28 @@ type bot struct {
 	*jira.Client
 }
 
-func initializeBot(config *config) *bot {
+// initializeBot
+// initialize bot structure by the config (telegram and jira)
+// configure proxy if it exists in the config
+func initializeBot(config *config) (*bot, error) {
+
+	if config == nil {
+		emptyConfigError := errors.New("There is empty config struct")
+		log.WithField("component", "initialize bot").Error(emptyConfigError)
+		return nil, emptyConfigError
+	}
+
+	if utf8.RuneCountInString(config.TgBotToken) != 45 {
+		notValidTokenError := errors.New("Telegram bot token is not valid")
+		log.WithField("component", "initialize bot").Error(notValidTokenError)
+		return nil, notValidTokenError
+	}
 
 	// telegram initialization
 
-	client := http.DefaultClient
+	client := &http.Client{
+		Timeout: 3 * time.Second,
+	}
 
 	if config.ProxyURL != "" {
 		dialer, err := proxy.SOCKS5(
@@ -32,7 +51,8 @@ func initializeBot(config *config) *bot {
 		)
 
 		if err != nil {
-			log.Panicf("Error in proxy %s", err)
+			log.WithField("component", "initialize proxy").Error(err)
+			return nil, err
 		}
 
 		client = &http.Client{
@@ -52,8 +72,8 @@ func initializeBot(config *config) *bot {
 	})
 
 	if err != nil {
-		log.Println("Can't initialize bot", err)
-		return nil
+		log.WithField("component", "initialize bot").Error(err)
+		return nil, err
 	}
 
 	// jira initialization
@@ -64,13 +84,18 @@ func initializeBot(config *config) *bot {
 	}
 	embeddedJira, err := jira.NewClient(tp.Client(), config.JiraURL)
 	if err != nil {
-		log.Println("Can't initialize bot", err)
-		return nil
+		log.WithField("component", "initialize jira").Error(err)
+		return nil, err
+	}
+	_, _, err = embeddedJira.User.GetSelf()
+	if err != nil {
+		log.WithField("component", "initialize jira").Error(err)
+		return nil, err
 	}
 
 	return &bot{
 		embeddedBot,
 		embeddedJira,
-	}
+	}, nil
 
 }

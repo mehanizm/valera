@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 func (b *bot) getIssueDescFromJira(issueKey string) string {
 
 	issue, _, err := b.Issue.Get(issueKey, nil)
 	if err != nil {
-		log.Println("ERROR in jira: ", err)
+		log.WithField("component", "jira issue parser").Error(err)
 		return ""
 	}
 

@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os"
 
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -15,6 +15,9 @@ type authData struct {
 	filePath     string
 }
 
+// saveAuthToFile save data about
+// allowed chat that collected in memory
+// to file
 func (a *authData) saveAuthToFile() error {
 
 	f, err := os.Create(a.filePath)
@@ -29,11 +32,13 @@ func (a *authData) saveAuthToFile() error {
 	}
 	w.Flush()
 
-	log.Println("Data saved to file", a.filePath)
+	log.WithField("component", "auth saver").Infof("Data saved to file %v", a.filePath)
 
 	return nil
 }
 
+// readAuthFromFile read file with
+// the white list chats if it exists
 func (a *authData) readAuthFromFile() error {
 
 	f, err := os.Open(a.filePath)
@@ -52,7 +57,8 @@ func (a *authData) readAuthFromFile() error {
 		return err
 	}
 
-	log.Printf("Successfully read %v lines from auth file\n", len(a.allowedChats))
+	log.WithField("component", "auth reader").
+		Infof("Successfully read %v lines from auth file", len(a.allowedChats))
 
 	return nil
 }
@@ -63,18 +69,22 @@ func (a *authData) checkAuthMiddleware(next func(m *tb.Message)) func(m *tb.Mess
 		switch {
 		case m.Text == a.secret:
 			a.allowedChats[m.Chat.Recipient()] = true
-			log.Printf("%v chat added to white list\n", m.Chat.Recipient())
+			log.WithField("component", "auth middleware").
+				Infof("%v chat added to white list", m.Chat.Recipient())
 			return
 		case m.Text == "save all data":
 			err := a.saveAuthToFile()
 			if err != nil {
-				log.Println("ERROR:", err)
+				log.WithField("component", "auth middleware").
+					Error(err)
 			}
 			return
 		case a.allowedChats[m.Chat.Recipient()]:
-			log.Printf("Message from allowed chat list %v\n", m.Chat.Recipient())
+			log.WithField("component", "auth middleware").
+				Infof("Message from allowed chat list %v", m.Chat.Recipient())
 		default:
-			log.Printf("Chat %v is not allowed\n", m.Chat.Recipient())
+			log.WithField("component", "auth middleware").
+				Infof("Chat %v is not allowed", m.Chat.Recipient())
 			return
 		}
 
@@ -84,7 +94,8 @@ func (a *authData) checkAuthMiddleware(next func(m *tb.Message)) func(m *tb.Mess
 
 func logTextMessageMiddleware(next func(m *tb.Message)) func(m *tb.Message) {
 	return func(m *tb.Message) {
-		log.Printf("Message from %s. Text: %s\n", m.Sender.Username, m.Text)
+		log.WithField("component", "log middleware").
+			Infof("Message from %s. Text: %s\n", m.Sender.Username, m.Text)
 		next(m)
 	}
 }
