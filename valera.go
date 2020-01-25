@@ -47,9 +47,10 @@ func main() {
 	}
 	err = auth.readAuthFromFile()
 	if err != nil {
-		log.Println("ERROR:", err)
+		log.WithField("component", "auth reader").Error(err)
 	}
-	log.Println("To add chat to the white list, please, send the string to the Bot:", auth.secret)
+	log.WithField("component", "auth reader").
+		Info("To add chat to the white list, please, send the string to the Bot:", auth.secret)
 
 	b, err := initializeBot(config)
 	if err != nil {
@@ -66,7 +67,7 @@ func main() {
 		),
 	)
 
-	log.Println("Start telegram bot")
+	log.WithField("component", "main bot").Info("Start telegram bot")
 	b.Start()
 
 }

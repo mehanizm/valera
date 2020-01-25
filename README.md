@@ -1,7 +1,7 @@
 Valera Telegram Bot
 ===
 
-<a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-29%25-brightgreen.svg?longCache=true&style=flat)</a>
+<a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-59%25-brightgreen.svg?longCache=true&style=flat)</a>
 
 Valera is the simple telegram bot that do one dead simple thing:
 

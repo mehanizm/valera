@@ -27,8 +27,10 @@ func (a *authData) saveAuthToFile() error {
 	defer f.Close()
 	w := bufio.NewWriter(f)
 
-	for chatID := range a.allowedChats {
-		fmt.Fprintln(w, chatID)
+	for chatID, status := range a.allowedChats {
+		if status {
+			fmt.Fprintln(w, chatID)
+		}
 	}
 	w.Flush()
 

@@ -26,6 +26,10 @@ func TestParseIssueKeysFromMsg(t *testing.T) {
 				"CDI-4652",
 			},
 		},
+		TestCaseParseIssueKeysFromMsg{
+			"",
+			[]string{},
+		},
 	}
 
 	for caseNum, item := range cases {

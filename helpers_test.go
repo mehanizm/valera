@@ -3,6 +3,7 @@ package main
 import (
 	"reflect"
 	"testing"
+	"unicode/utf8"
 )
 
 type TestCaseGetUniqueMap struct {
@@ -32,5 +33,26 @@ func TestGetUniqueMap(t *testing.T) {
 		if !eq {
 			t.Errorf("Mistake in case number [%d]", caseNum+1)
 		}
+	}
+}
+
+func Test_randSeq(t *testing.T) {
+	tests := []struct {
+		name       string
+		n          int
+		wantLength int
+	}{
+		{
+			name:       "Case 1. Check lenth",
+			n:          10,
+			wantLength: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := randSeq(tt.n); utf8.RuneCountInString(got) != tt.wantLength {
+				t.Errorf("randSeq() = %v, wantLength %v", tt.n, tt.wantLength)
+			}
+		})
 	}
 }

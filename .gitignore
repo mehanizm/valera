@@ -65,3 +65,4 @@ configs/whitelist.txt
 
 *.png
 .vscode/launch.json
+coverage.txt

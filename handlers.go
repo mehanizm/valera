@@ -6,9 +6,8 @@ import (
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-type handlerFunc func(m *tb.Message)
-
 func (b *bot) textMessageHandler() func(m *tb.Message) {
+
 	return func(m *tb.Message) {
 
 		taskKeys := parseIssueKeysFromMsg(m.Text)
@@ -25,4 +24,5 @@ func (b *bot) textMessageHandler() func(m *tb.Message) {
 		b.Send(m.Chat, messageText)
 
 	}
+
 }
