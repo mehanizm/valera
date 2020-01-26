@@ -63,6 +63,9 @@ func initializeBot(config *config) (*bot, error) {
 			},
 		}
 
+		log.WithField("component", "initialize proxy").
+			Infof("connecting to telegram with proxy %v", config.ProxyURL)
+
 	}
 
 	embeddedBot, err := tb.NewBot(tb.Settings{
@@ -75,6 +78,8 @@ func initializeBot(config *config) (*bot, error) {
 		log.WithField("component", "initialize bot").Error(err)
 		return nil, err
 	}
+
+	embeddedBot.Raw("deleteWebhook", map[string]string{})
 
 	// jira initialization
 

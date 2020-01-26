@@ -18,6 +18,9 @@ func (b *bot) getIssueDescFromJira(issueKey string) string {
 		return ""
 	}
 
+	log.WithField("component", "jira issue parser").
+		Infof("get result from jira about task %v", issueKey)
+
 	return printToMessage(issue)
 
 }

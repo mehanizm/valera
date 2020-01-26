@@ -60,7 +60,7 @@ func (a *authData) readAuthFromFile() error {
 	}
 
 	log.WithField("component", "auth reader").
-		Infof("Successfully read %v lines from auth file", len(a.allowedChats))
+		Infof("successfully read %v lines from auth file", len(a.allowedChats))
 
 	return nil
 }
@@ -87,10 +87,10 @@ func (a *authData) checkAuthMiddleware(next func(m *tb.Message)) func(m *tb.Mess
 			return
 		case a.allowedChats[m.Chat.Recipient()]:
 			log.WithField("component", "auth middleware").
-				Infof("Message from allowed chat list %v", m.Chat.Recipient())
+				Infof("message from allowed chat list %v", m.Chat.Recipient())
 		default:
 			log.WithField("component", "auth middleware").
-				Infof("Chat %v is not allowed", m.Chat.Recipient())
+				Infof("chat %v is not allowed", m.Chat.Recipient())
 			return
 		}
 

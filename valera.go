@@ -50,13 +50,12 @@ func main() {
 		log.WithField("component", "auth reader").Error(err)
 	}
 	log.WithField("component", "auth reader").
-		Info("To add chat to the white list, please, send the string to the Bot:", auth.secret)
+		Info("to add chat to the white list, please, send the string to the Bot:", auth.secret)
 
 	b, err := initializeBot(config)
 	if err != nil {
-		os.Exit(2)
+		return
 	}
-	b.Raw("deleteWebhook", map[string]string{})
 
 	b.Handle(
 		tb.OnText,
@@ -67,7 +66,7 @@ func main() {
 		),
 	)
 
-	log.WithField("component", "main bot").Info("Start telegram bot")
+	log.WithField("component", "main bot").Info("start telegram bot")
 	b.Start()
 
 }
