@@ -54,57 +54,155 @@ func Test_authData_saveAuthToFile(t *testing.T) {
 }
 
 func Test_logTextMessageMiddleware(t *testing.T) {
-	tests := []struct {
+	testCase := struct {
 		name string
 		next func(m *tb.Message)
-		want func(m *tb.Message)
 	}{
-		{
-			name: "Case 1. Check positive",
-			next: func(m *tb.Message) {},
-			want: func(m *tb.Message) {},
-		},
+		name: "Case 1. Check positive",
+		next: func(m *tb.Message) {},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if reflect.TypeOf(logTextMessageMiddleware(tt.next)) != reflect.TypeOf(tt.want) {
-				t.Error("Error in logTextMessageMiddleware")
-			}
-		})
-	}
+
+	t.Run(testCase.name, func(t *testing.T) {
+		if reflect.TypeOf(logTextMessageMiddleware(testCase.next)) != reflect.TypeOf(testCase.next) {
+			t.Error("Error in logTextMessageMiddleware")
+		}
+	})
 }
 
-func Test_authData_checkAuthMiddleware(t *testing.T) {
-	type fields struct {
-		secret       string
-		allowedChats map[string]bool
-		filePath     string
-	}
-	tests := []struct {
+func Test_authData_checkAuthMiddleware_positive(t *testing.T) {
+	testCase := struct {
 		name   string
-		fields fields
+		fields *authData
 		next   func(m *tb.Message)
 		want   func(m *tb.Message)
 	}{
+		name: "Case 1. Check positive",
+		fields: &authData{
+			allowedChats: map[string]bool{
+				"123": true,
+			},
+		},
+		next: func(m *tb.Message) {},
+		want: func(m *tb.Message) {},
+	}
+
+	t.Run(testCase.name, func(t *testing.T) {
+		if reflect.TypeOf(testCase.fields.checkAuthMiddleware(testCase.next)) != reflect.TypeOf(testCase.want) {
+			t.Error("Error in logTextMessageMiddleware")
+		}
+	})
+
+}
+
+func assertPanic(t *testing.T, f func(m *tb.Message), m *tb.Message) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code not panic")
+		}
+	}()
+	f(m)
+}
+
+func Test_authData_checkAuthMiddleware(t *testing.T) {
+	tests := []struct {
+		name      string
+		auth      *authData
+		m         *tb.Message
+		wantPanic bool
+	}{
 		{
-			name: "Case 1. Positive",
-			fields: fields{
+			name: "Case 1. Check not allowed",
+			auth: &authData{
 				allowedChats: map[string]bool{
 					"123": true,
 				},
+				// secret: "secret",
 			},
-			next: func(m *tb.Message) {},
-			want: func(m *tb.Message) {},
+			m: &tb.Message{
+				Text: "some text",
+				Chat: &tb.Chat{
+					ID: 122,
+				},
+			},
+			wantPanic: false,
 		},
+		{
+			name: "Case 2. Check allowed",
+			auth: &authData{
+				allowedChats: map[string]bool{
+					"123": true,
+				},
+				// secret: "secret",
+			},
+			m: &tb.Message{
+				Text: "some text",
+				Chat: &tb.Chat{
+					ID: 123,
+				},
+			},
+			wantPanic: true,
+		},
+		{
+			name: "Case 3. Check secret",
+			auth: &authData{
+				allowedChats: map[string]bool{
+					"123": true,
+				},
+				secret: "secret",
+			},
+			m: &tb.Message{
+				Text: "secret",
+				Chat: &tb.Chat{
+					ID: 122,
+				},
+			},
+			wantPanic: false,
+		},
+		{
+			name: "Case 4. Check save",
+			auth: &authData{
+				allowedChats: map[string]bool{
+					"123": true,
+				},
+				secret: "secret",
+			},
+			m: &tb.Message{
+				Text: "save all data",
+				Chat: &tb.Chat{
+					ID: 123,
+				},
+			},
+			wantPanic: false,
+		},
+		{
+			name: "Case 5. Check save not allowed",
+			auth: &authData{
+				allowedChats: map[string]bool{
+					"123": true,
+				},
+				secret: "secret",
+			},
+			m: &tb.Message{
+				Text: "save all data",
+				Chat: &tb.Chat{
+					ID: 122,
+				},
+			},
+			wantPanic: false,
+		},
+	}
+	next := func(m *tb.Message) {
+		panic("panic")
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &authData{
-				allowedChats: tt.fields.allowedChats,
-			}
-			if reflect.TypeOf(a.checkAuthMiddleware(tt.next)) != reflect.TypeOf(tt.want) {
-				t.Error("Error in logTextMessageMiddleware")
-			}
+			afterMiddleware := tt.auth.checkAuthMiddleware(next)
+			defer func() {
+				if r := recover(); r == nil && tt.wantPanic {
+					t.Errorf("Auth middleware error")
+				}
+			}()
+			afterMiddleware(tt.m)
 		})
 	}
 }

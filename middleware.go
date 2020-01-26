@@ -65,6 +65,10 @@ func (a *authData) readAuthFromFile() error {
 	return nil
 }
 
+// checkAuthMiddleware
+// 1. use authData.allowedChats to check if the chat is in white list or not
+// 2. add chat to in-memory white list
+// 3. save in-memory white list to file
 func (a *authData) checkAuthMiddleware(next func(m *tb.Message)) func(m *tb.Message) {
 	return func(m *tb.Message) {
 
@@ -74,7 +78,7 @@ func (a *authData) checkAuthMiddleware(next func(m *tb.Message)) func(m *tb.Mess
 			log.WithField("component", "auth middleware").
 				Infof("%v chat added to white list", m.Chat.Recipient())
 			return
-		case m.Text == "save all data":
+		case m.Text == "save all data" && a.allowedChats[m.Chat.Recipient()]:
 			err := a.saveAuthToFile()
 			if err != nil {
 				log.WithField("component", "auth middleware").
@@ -94,10 +98,22 @@ func (a *authData) checkAuthMiddleware(next func(m *tb.Message)) func(m *tb.Mess
 	}
 }
 
+// logTextMessageMiddleware is simple
+// logging middleware
 func logTextMessageMiddleware(next func(m *tb.Message)) func(m *tb.Message) {
 	return func(m *tb.Message) {
-		log.WithField("component", "log middleware").
-			Infof("Message from %s. Text: %s\n", m.Sender.Username, m.Text)
+		log.WithFields(
+			log.Fields{
+				"component": "log middleware",
+				"message info": fmt.Sprintf("chatID: %v, username: %v, text: %v",
+					m.Chat.ID,
+					m.Sender.Username,
+					m.Text,
+				),
+			},
+		).
+			Infof("message received")
+
 		next(m)
 	}
 }

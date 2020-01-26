@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "build mac os version"
-go build -o builds/valera -v *.go
+go build -o builds/valera_macos -v *.go
 echo "build success"
 
 echo ""
