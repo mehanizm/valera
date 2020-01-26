@@ -94,15 +94,6 @@ func Test_authData_checkAuthMiddleware_positive(t *testing.T) {
 
 }
 
-func assertPanic(t *testing.T, f func(m *tb.Message), m *tb.Message) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("The code not panic")
-		}
-	}()
-	f(m)
-}
-
 func Test_authData_checkAuthMiddleware(t *testing.T) {
 	tests := []struct {
 		name      string
