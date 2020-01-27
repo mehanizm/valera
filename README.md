@@ -1,7 +1,7 @@
 Valera Telegram Bot
 ===
 
-<a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-69%25-brightgreen.svg?longCache=true&style=flat)</a>
+<a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-69%25-brightgreen.svg?longCache=true&style=flat)</a> <a href='https://goreportcard.com/report/github.com/mehanizm/valera' target='_blank'>![goreportcard](https://goreportcard.com/badge/github.com/mehanizm/valera)</a>
 
 Valera is the simple telegram bot that do one dead simple thing:
 
