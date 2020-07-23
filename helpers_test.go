@@ -13,18 +13,20 @@ type TestCaseGetUniqueMap struct {
 
 func TestGetUniqueMap(t *testing.T) {
 	cases := []TestCaseGetUniqueMap{
-		TestCaseGetUniqueMap{
+		{
 			[]string{"123", "123", "223"},
 			[]string{"123", "223"},
 		},
-		TestCaseGetUniqueMap{
+		{
 			[]string{"123", "123"},
 			[]string{"123"},
 		},
-		TestCaseGetUniqueMap{
+		// spell-checker: disable
+		{
 			[]string{"hflf", "dfiae", "fdaef"},
 			[]string{"hflf", "dfiae", "fdaef"},
 		},
+		// spell-checker: enable
 	}
 
 	for caseNum, item := range cases {
@@ -43,7 +45,7 @@ func Test_randSeq(t *testing.T) {
 		wantLength int
 	}{
 		{
-			name:       "Case 1. Check lenth",
+			name:       "Case 1. Check length",
 			n:          10,
 			wantLength: 10,
 		},

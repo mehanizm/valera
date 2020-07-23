@@ -12,13 +12,14 @@ type TestCaseParseIssueKeysFromMsg struct {
 
 func TestParseIssueKeysFromMsg(t *testing.T) {
 	cases := []TestCaseParseIssueKeysFromMsg{
-		TestCaseParseIssueKeysFromMsg{
+		{
 			`CDI-4532 - Автоматическая выгрузка полей полнотекстового и расширенного поиска Демо-заказчика
 			CDI-4532 - Автоматическая выгрузка полей полнотекстового и расширенного поиска Демо-заказчика
 			CDI-4532 - Автоматическая выгрузка полей полнотекстового и расширенного поиска Демо-заказчика`,
 			[]string{"CDI-4532"},
 		},
-		TestCaseParseIssueKeysFromMsg{
+		// spell-checker: disable
+		{
 			"CDI-4532 АвтонотFSUP-33 ДобавлеекстCDI-4652 Учесть ноового и",
 			[]string{
 				"CDI-4532",
@@ -26,7 +27,8 @@ func TestParseIssueKeysFromMsg(t *testing.T) {
 				"CDI-4652",
 			},
 		},
-		TestCaseParseIssueKeysFromMsg{
+		// spell-checker: enable
+		{
 			"",
 			[]string{},
 		},

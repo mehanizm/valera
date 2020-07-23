@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// spell-checker: disable
+
 func Test_initializeBot(t *testing.T) {
 	type args struct {
 		config *config
@@ -38,9 +40,9 @@ func Test_initializeBot(t *testing.T) {
 				JiraUser:   "test",
 				JiraPass:   "test",
 				TgBotToken: "709294056:AAFIfAgcNTzaIjPdR5bColgOj2vGOKSsgTg",
-				ProxyURL:   "grsst.s5.opennetwork.cc:999",
-				ProxyUser:  "41591017",
-				ProxyPass:  "5NEISabl",
+				// ProxyURL:   "grsst.s5.opennetwork.cc:999",
+				// ProxyUser:  "41591017",
+				// ProxyPass:  "5NEISabl",
 			},
 			want:    nil,
 			wantErr: true,
